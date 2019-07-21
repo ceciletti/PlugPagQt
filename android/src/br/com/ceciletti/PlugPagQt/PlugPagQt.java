@@ -24,6 +24,7 @@ class PlugPagNatives
     public static native void sendEvent(int code, String message);
     public static native void sendAuthenticationSuccess();
     public static native void sendTransactionResult(PlugPagTransactionResult result);
+    public static native void sendLastTransactionResult(PlugPagTransactionResult result);
 }
 
 class PlugPagEventListenerQt implements PlugPagEventListener
@@ -59,35 +60,6 @@ public class PlugPagQt
     public static PlugPag mPlugPag = null;
     public static PlugPagAuthenticationListenerQt mPlugPagAuthListener = null;
 
-    public void hello()
-    {
-        System.out.println("Java HELLO 4-.......");
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                System.out.println("Inside : " + Thread.currentThread().getName());
-                try
-                {
-                    Thread.sleep(5000);
-                }
-                catch(InterruptedException ex)
-                {
-                    Thread.currentThread().interrupt();
-                }
-                PlugPagNatives.sendEvent(123, Thread.currentThread().getName());
-                System.out.println("Inside END: " + Thread.currentThread().getName());
-            }
-        };
-
-        System.out.println("Creating Thread...");
-        Thread thread = new Thread(runnable);
-
-        System.out.println("Starting Thread...");
-        thread.start();
-
-        System.out.println("Java HELLO 4+.......");
-    }
-
     public void setup(final Activity qtActivity, final String appName, final String appVersion)
     {
         System.out.println("Java Setup: " + appName + " " + appVersion);
@@ -104,6 +76,10 @@ public class PlugPagQt
 
                     PlugPagNatives.sendInitted(PlugPagQt.mPlugPag.isAuthenticated(), PlugPagQt.mPlugPag.getLibVersion());
                     System.out.println("Inside END: " + Thread.currentThread().getName());
+                    int ret = PlugPagQt.mPlugPag.checkRequirements(PlugPagDevice.TYPE_PINPAD);
+                    System.out.println("Inside END: " + ret);
+                    ret = PlugPagQt.mPlugPag.checkRequirements(PlugPagDevice.TYPE_TERMINAL);
+                    System.out.println("Inside END: " + ret);
                 }
             }).start();
         }
@@ -111,6 +87,7 @@ public class PlugPagQt
 
     public void authenticate()
     {
+        System.out.println("requestAuthentication: " + Thread.currentThread().getName() + " isauth: " + this.mPlugPag.isAuthenticated());
         this.mPlugPag.requestAuthentication(this.mPlugPagAuthListener);
     }
 
@@ -176,12 +153,22 @@ public class PlugPagQt
             @Override
             public void run() {
                 System.out.println("Java startPaymentCredit: " + value);
-                PlugPagPaymentData paymentData = new PlugPagPaymentData(
-                PlugPag.TYPE_CREDITO,
-                value, // Valor: R$ 1,23
-                PlugPag.INSTALLMENT_TYPE_A_VISTA,
-                1, // Parcelas
-                "...");
+//                PlugPagPaymentData paymentData = new PlugPagPaymentData(
+//                PlugPag.TYPE_CREDITO,
+//                value, // Valor: R$ 1,23
+//                PlugPag.INSTALLMENT_TYPE_A_VISTA,
+//                1, // Parcelas
+//                "...");
+
+                PlugPagPaymentData paymentData = null;
+
+                paymentData = new PlugPagPaymentData.Builder()
+                        .setType(PlugPag.TYPE_CREDITO)
+                        .setInstallmentType(PlugPag.INSTALLMENT_TYPE_A_VISTA)
+                        .setAmount(value)
+                        .setUserReference("qt-ref")
+                        .build();
+
                 PlugPagTransactionResult result = PlugPagQt.mPlugPag.doPayment(paymentData);
                 System.out.println("Java startPaymentCredit getResult: " + result.getResult());
                 PlugPagNatives.sendTransactionResult(result);
@@ -213,9 +200,10 @@ public class PlugPagQt
          }).start();
     }
 
-    public PlugPagTransactionResult getLastApprovedTransaction()
+    public void getLastApprovedTransaction()
     {
         PlugPagTransactionResult result = this.mPlugPag.getLastApprovedTransaction();
+        PlugPagNatives.sendLastTransactionResult(result);
 //        if (result == null) {
 //            return result;
 //        }
@@ -234,6 +222,6 @@ public class PlugPagQt
     //        String amount = result.getAmount();
     //        String availableBalance = result.getAvailableBalance();
 
-        return result;
+//        return result;
     }
 }

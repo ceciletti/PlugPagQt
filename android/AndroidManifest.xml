@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <manifest package="br.com.ceciletti.PlugPagQt" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="-- %%INSERT_VERSION_NAME%% --" android:versionCode="-- %%INSERT_VERSION_CODE%% --" android:installLocation="auto" xmlns:tools="http://schemas.android.com/tools">
-    <uses-sdk android:minSdkVersion="16" android:targetSdkVersion="28"/>
+    <uses-sdk android:minSdkVersion="19" android:targetSdkVersion="28"/>
 
     <!-- The following comment will be replaced upon deployment with default permissions based on the dependencies of the application.
          Remove the comment if you do not require these default permissions. -->
@@ -31,7 +31,7 @@
             <!-- meta-data android:name="android.app.arguments" android:value="arg1 arg2 arg3"/ -->
             <!-- Application arguments -->
 
-            <meta-data android:name="android.app.lib_name" android:value="-- %%INSERT_APP_LIB_NAME%% --"/>
+            <meta-data android:name="android.app.lib_name" android:value="PlugPagQt"/>
             <meta-data android:name="android.app.qt_sources_resource_id" android:resource="@array/qt_sources"/>
             <meta-data android:name="android.app.repository" android:value="default"/>
             <meta-data android:name="android.app.qt_libs_resource_id" android:resource="@array/qt_libs"/>
@@ -89,7 +89,7 @@
             <!-- extract android style -->
     </activity>
     <activity android:name="br.com.uol.pagseguro.plugpag.PlugPagActivity" android:label="PlugPagQt">
-            <meta-data android:name="android.app.lib_name" android:value="-- %%INSERT_APP_LIB_NAME%% --"/>
+            <meta-data android:name="android.app.lib_name" android:value="PlugPagQt"/>
         </activity>
     <!-- For adding service(s) please check: https://wiki.qt.io/AndroidServices -->
 

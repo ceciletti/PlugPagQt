@@ -2,13 +2,10 @@ buildscript {
     repositories {
         google()
         jcenter()
-//        maven {
-//         url 'https://github.com/pagseguromaster/plugpag/raw/master/3.x/android'
-//        }
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.0'
+        classpath 'com.android.tools.build:gradle:3.2.1'
     }
 }
 
@@ -23,9 +20,7 @@ repositories {
 apply plugin: 'com.android.application'
 
 dependencies {
-    implementation 'com.android.support:appcompat-v7:28+'
     implementation 'com.android.support:design:28+'
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
     implementation 'br.com.uol.pagseguro:plugpag:3.1.2'
 }

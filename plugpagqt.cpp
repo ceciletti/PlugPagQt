@@ -86,6 +86,22 @@ Java_br_com_ceciletti_PlugPagQt_PlugPagNatives_sendTransactionResult(JNIEnv *env
 }
 
 JNIEXPORT void JNICALL
+Java_br_com_ceciletti_PlugPagQt_PlugPagNatives_sendLastTransactionResult(JNIEnv *env, jobject obj, jobject result)
+{
+    Q_UNUSED(env)
+    Q_UNUSED(obj)
+    qDebug() << "sendLastTransactionResult";
+    QVariantHash resultHash;
+    QAndroidJniObject resultObj(result);
+    if (resultObj.isValid()) {
+        resultHash = jResultToQVariantHash(resultObj);
+    }
+
+    qDebug() << "sendLastTransactionResult" << resultHash;
+    QMetaObject::invokeMethod(ppInstanceP, "sendLastTransactionResult", Qt::QueuedConnection, Q_ARG(QVariantHash, resultHash));
+}
+
+JNIEXPORT void JNICALL
 Java_br_com_ceciletti_PlugPagQt_PlugPagNatives_sendEvent(JNIEnv *env, jobject obj, jint code, jstring message)
 {
     Q_UNUSED(env)
@@ -306,7 +322,7 @@ QVariantHash PlugPagQt::getLastApprovedTransaction()
 #ifdef Q_OS_ANDROID
     Q_D(PlugPagQt);
     qDebug() << "getLastApprovedTransaction";
-    QAndroidJniObject result = d->plugPag.callObjectMethod("getLastApprovedTransaction", "(V)Lbr/com/uol/pagseguro/plugpag.PlugPagTransactionResult;");
+    d->plugPag.callMethod<void>("getLastApprovedTransaction");
 
     QAndroidJniEnvironment env;
     if (env->ExceptionCheck()) {
@@ -316,11 +332,11 @@ QVariantHash PlugPagQt::getLastApprovedTransaction()
         env->ExceptionClear();
     }
 
-    if (result.isValid()) {
-        ret = jResultToQVariantHash(result);
-    }
+//    if (result.isValid()) {
+//        ret = jResultToQVariantHash(result);
+//    }
 
-    qDebug() << "getLastApprovedTransaction" << result.isValid() << ret;
+//    qDebug() << "getLastApprovedTransaction" << result.isValid() << ret;
 #endif
     return ret;
 }

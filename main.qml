@@ -45,9 +45,9 @@ ApplicationWindow {
                 }
                 RowLayout {
                     Button {
-                        enabled: plugpag.initted && plugpag.authenticated && !plugpag.inittedBt && btCombo.currentIndex !== -1
+                        enabled: plugpag.initted && plugpag.authenticated && !plugpag.inittedBt && (btCombo.currentIndex !== -1 || btCombo.editText.length > 0)
                         text: "Init BT"
-                        onClicked: plugpag.initBt(btCombo.currentText)
+                        onClicked: btCombo.currentIndex !== -1 ? plugpag.initBt(btCombo.currentText) : plugpag.initBt(btCombo.editText)
                     }
                     ComboBox {
                         Layout.fillWidth: true
