@@ -139,7 +139,7 @@ public class PlugPagQt
                 value, // Valor: R$ 1,23
                 PlugPag.INSTALLMENT_TYPE_A_VISTA,
                 1, // Parcelas
-                "...");
+                "COD2");// Código da venda, todo cheio de frescura, dá erro de comunicação se não atender ao formato.
                 PlugPagTransactionResult result = PlugPagQt.mPlugPag.doPayment(paymentData);
                 System.out.println("Java startPaymentDebt getResult: " + result.getResult());
                 PlugPagNatives.sendTransactionResult(result);
@@ -166,7 +166,7 @@ public class PlugPagQt
                         .setType(PlugPag.TYPE_CREDITO)
                         .setInstallmentType(PlugPag.INSTALLMENT_TYPE_A_VISTA)
                         .setAmount(value)
-                        .setUserReference("qt-ref")
+                        .setUserReference("COD1")// Código da venda, todo cheio de frescura, dá erro de comunicação se não atender ao formato.
                         .build();
 
                 PlugPagTransactionResult result = PlugPagQt.mPlugPag.doPayment(paymentData);
